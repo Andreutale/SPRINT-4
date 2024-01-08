@@ -12,10 +12,10 @@ const int CHANNEL_P = 2;
 const int CHANNEL_B = 3;
 
 
-/--------------------HUMIDITY--------------------/
+/*--------------------HUMIDITY--------------------*/
 void getHumidity() {
-  const int WET_VALUE = 16870;
-  const int DRY_VALUE = 30084;
+  const int WET_VALUE = 2910;
+  const int DRY_VALUE = 16058;
   const int MIN = 0;
   const int MAX = 100;
   float sensorValueH = ads.readADC_SingleEnded(CHANNEL_H);
@@ -23,25 +23,29 @@ void getHumidity() {
   float humidityValue = map(sensorValueH, DRY_VALUE, WET_VALUE, MIN, MAX);
 
   Serial.print("Humedad: ");
-  Serial.print(humidityValue);
+  if(humidityValue > 100){
+    Serial.print("100.00");
+  }else{
+    Serial.print(humidityValue);
+  }
   Serial.println("%");
 }
 
-/--------------------TEMPERATURE--------------------/
+/*--------------------TEMPERATURE--------------------*/
 void getTemperature() {
-  float num = 4.096, num2 = 32767, b = 0.79, m = 0.035;
+  float num = 4.096, num2 = 32768, b = 0.79, m = 0.033;
   int sensorValueT = ads.readADC_SingleEnded(CHANNEL_T);
-  float Vout = ((float)sensorValueT * num)/num2;
-  float temperatureValue = ((Vout - b)/m) - 1.5;
+  float Vout = (sensorValueT * num)/num2;
+  float temperatureValue = ((Vout - b)/m);
 
   Serial.print("Temperature: ");
   Serial.print(temperatureValue);
   Serial.println("ºC");
 }
 
-/--------------------SALINITY--------------------/
+/*--------------------SALINITY--------------------*/
  
-/int getSalinity() {  //chequear calibracion
+/*int getSalinity() {  //chequear calibracion
   int16_t adc0;
 
   digitalWrite(power_pin, HIGH);
@@ -62,10 +66,10 @@ void showSalinity() {
   Serial.print("Salinity: ");
   Serial.print(salinity);
   Serial.println("gr/l");
-}/
+}*/
 
 
-/--------------------PH--------------------/
+/*--------------------PH--------------------*/
 void getPh() {
   float num = 4.096, num2 = 32767;
   const float OFFSET = 5.3;
@@ -77,7 +81,8 @@ void getPh() {
   Serial.print("pH: ");
   Serial.println(phValue);
 }
-/--------------------BRIGHTNESS-------------------/
+
+/*--------------------BRIGHTNESS-------------------*/
 void getBrightness() {
   int sensorValueB = ads.readADC_SingleEnded(CHANNEL_B);
   const int DARKNESS = 500;
@@ -98,7 +103,7 @@ void getBrightness() {
 } 
 
 
-/--------------------------------------/
+/*--------------------------------------*/
 void initializeSparkfun() {
   pinMode(power_pin, OUTPUT);
   Serial.begin(9600);
